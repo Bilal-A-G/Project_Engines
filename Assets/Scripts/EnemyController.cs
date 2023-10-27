@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
+using Managers.Pool;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour
+public class EnemyController : MonoBehaviour, IPooledObject
 {
-    [HideInInspector] public Transform tower;
     [HideInInspector] public EnemySO enemyStats;
 
     [SerializeField] private Transform enemy;
@@ -21,7 +19,7 @@ public class EnemyController : MonoBehaviour
 
     private void Update()
     {
-        if ((enemy.position - tower.position).magnitude > distanceToDamageTower)
+        if ((enemy.position - EnemySpawner.Target).magnitude > distanceToDamageTower)
         {
             Move();
             return;
@@ -45,16 +43,33 @@ public class EnemyController : MonoBehaviour
     private void Move()
     {
         //Read in speed here from the SO
-        enemy.transform.position += (tower.position - enemy.position).normalized * Time.deltaTime;
+        enemy.transform.position += (EnemySpawner.Target - enemy.position).normalized * Time.deltaTime;
     }
 
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-
-        if(currentHealth <= 0)
-            Destroy(enemy.gameObject);
+        Debug.Log(currentHealth);
+        if(currentHealth <= 0) KillObject();
 
         //Decrement gameManager.numEnemies
+    }
+
+    public void SpawnObject()
+    {
+        print("I was spawned.. What do I do?");
+    }
+
+    public void KillObject()
+    {
+        gameObject.SetActive(false);
+        PoolManager.ReturnToPool(this, name);
+        --GameManager.Instance.numEnemies;// This is real lazy, but I'm not gunna do this part.
+
+    }
+
+    public T GetComponentType<T>() where T : MonoBehaviour
+    {
+        return this as T;
     }
 }
