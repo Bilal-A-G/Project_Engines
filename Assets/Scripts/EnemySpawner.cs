@@ -12,6 +12,8 @@ public class EnemySpawner : MonoBehaviour
 
     void Start()
     {
+        GameManager gManager = GameManager.Instance;
+
         //For testing purposes, delete
         GameObject instantiatedEnemy = Instantiate(enemyPrefab);
         instantiatedEnemy.transform.position = spawnPoints[0].position;
@@ -22,6 +24,11 @@ public class EnemySpawner : MonoBehaviour
     private void Update()
     {
         //if gameManager.numEnemies is 0
+        if (GameManager.Instance.numEnemies == 0)
+        {
+            GameManager.Instance.currentRound++;
+            SpawnEnemies();
+        }
         //Increment wave count
         //Spawn enemies
     }
@@ -29,14 +36,19 @@ public class EnemySpawner : MonoBehaviour
     void SpawnEnemies()
     {
         //for each gameManager.currentRound spawn an enemy
+        for (int i = 0; i < GameManager.Instance.currentRound; i++)
+        {
+            Debug.Log("Hello");
+        }
 
         //Factory:
-            //Spawn a random enemy type
-            //Spawn it at a random spawner
-            //Assign the tower variable
+        //Spawn a random enemy type
+        //Spawn it at a random spawner
+        //Assign the tower variable
 
 
         //Increment num enemies
+        GameManager.Instance.numEnemies++;
         //Add object pooling here
     }
 }
