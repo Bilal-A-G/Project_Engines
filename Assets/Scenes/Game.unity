@@ -2407,11 +2407,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1279701260}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 549bd3b0063860640960107c92e4c698, type: 3}
+  m_Script: {fileID: -1694876985, guid: 287fcca826addd04d99292877445f869, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectSpawned: {fileID: 3212799697271921774, guid: 899363ddb2c7e6143830917765bf1378, type: 3}
-  spawnLocation: {fileID: 1290995007}
+  prefab: {fileID: 3212799697271921774, guid: 899363ddb2c7e6143830917765bf1378, type: 3}
+  position: {x: 0, y: 0.86, z: 0}
 --- !u!1 &1290995006
 GameObject:
   m_ObjectHideFlags: 0
