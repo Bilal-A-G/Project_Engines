@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class TurretController : MonoBehaviour
 {
-    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private Rigidbody bulletPrefab;
     [SerializeField] private Camera mainCamera;
     [SerializeField] private float bulletVelocity;
     [SerializeField] private Transform turret;
@@ -30,10 +28,42 @@ public class TurretController : MonoBehaviour
     [SerializeField] private CachedObjectWrapper cachedObjects;
     [SerializeField] private GameObject callingObject;
 
+    [SerializeField] private float mouseSensitivity = 10;
+    
+    private SomethingControls ctrls;
+    private bool isUnlocked = true;
     private bool activated = true;
 
     private void Start()
     {
+        ctrls = new();
+        ctrls.Cringe.Enable();
+        ctrls.Cringe.Shoot.performed += _ =>
+        {
+            if (isUnlocked) Lock();
+
+            if (timeSinceLastFire < cooldown) return;
+            
+            timeSinceLastFire = 0;
+            Rigidbody instantiatedBullet = Instantiate(bulletPrefab);
+            instantiatedBullet.transform.position = firePoint.position;
+            instantiatedBullet.AddForce(bulletVelocity * firePoint.forward, ForceMode.Impulse);
+            instantiatedBullet.GetComponent<Bullet>().bulletDamage = bulletDamage;
+            Destroy(instantiatedBullet, bulletLifetime);
+        };
+     
+        Vector2 mousePosition = Vector2.zero;
+        ctrls.Cringe.Move.performed += ctx =>
+        {
+            mousePosition += ctx.ReadValue<Vector2>() * mouseSensitivity;
+            //Debug.Log(Mathf.Atan2(mousePosition.y,mousePosition.x) + ", " + ctx.ReadValue<Vector2>() +" ," + angle);
+            turret.eulerAngles = new Vector3(0,mousePosition.x,0);
+
+        };
+
+        ctrls.Cringe.Escape.performed += _ => Unlock();
+
+
         fsm.UpdateState(activateTower, callingObject, cachedObjects);
 
         timeSinceLastFire = cooldown;
@@ -45,46 +75,31 @@ public class TurretController : MonoBehaviour
     void Update()
     {
         fsm.UpdateState(updateTower, callingObject, cachedObjects);
-
+/*
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             activated = !activated;
 
-            if (activated)
-            {
-                fsm.UpdateState(activateTower, callingObject, cachedObjects);
-            }
-            else
-            {
-                fsm.UpdateState(deactivateTower, callingObject, cachedObjects);
-            }
+            fsm.UpdateState(activated ? activateTower : deactivateTower, callingObject, cachedObjects);
         }
-
+*/
         timeSinceLastFire += Time.deltaTime;
-
-        UpdateTower();
     }
 
-    void UpdateTower()
+    public void Lock()
     {
-        RotateTowardsTarget();
-
-        if (timeSinceLastFire < cooldown)
-            return;
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            timeSinceLastFire = 0;
-
-            GameObject instantiatedBullet = Instantiate(bulletPrefab);
-            instantiatedBullet.transform.position = firePoint.position;
-            Rigidbody physicsBody = instantiatedBullet.GetComponent<Rigidbody>();
-            physicsBody.AddForce(bulletVelocity * firePoint.forward, ForceMode.Impulse);
-            instantiatedBullet.GetComponent<Bullet>().bulletDamage = bulletDamage;
-
-            Destroy(instantiatedBullet, bulletLifetime);
-        }
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        isUnlocked = false;
     }
+
+    public void Unlock()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        isUnlocked = true;
+    }
+
 
     void OnTakeDamage()
     {
@@ -96,13 +111,4 @@ public class TurretController : MonoBehaviour
             SceneManager.LoadScene("Game");
     }
 
-    void RotateTowardsTarget()
-    {
-        Vector2 mousePosition = Input.mousePosition;
-        Vector3 worldSpaceMousePos = mainCamera.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, 1.0f));
-        Vector3 toMousePos = (worldSpaceMousePos - turret.position).normalized;
-
-        turret.transform.rotation = Quaternion.Lerp(turret.transform.rotation,
-            Quaternion.LookRotation(new Vector3(toMousePos.x, 0, toMousePos.z).normalized, turret.up), Time.deltaTime * rotationSpeed);
-    }
 }
