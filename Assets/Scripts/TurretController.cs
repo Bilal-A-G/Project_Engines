@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class TurretController : MonoBehaviour
 {
@@ -10,14 +11,17 @@ public class TurretController : MonoBehaviour
     [SerializeField] private Transform firePoint;
     [SerializeField] private float rotationSpeed;
 
-    [SerializeField] private float maxHealth;
+    [SerializeField] private float maxHealth = 10;
 
     [SerializeField] private float bulletDamage;
     [SerializeField] private float bulletLifetime;
 
     [SerializeField] private float cooldown;
     private float timeSinceLastFire;
-    private float currentHealth;
+
+
+    public float currentHealth;
+    public Slider healthBar;
 
     [Header("W_I_Zr_Ds")]
     [SerializeField] private EventObject updateTower;
@@ -56,6 +60,7 @@ public class TurretController : MonoBehaviour
             mousePosition += ctx.ReadValue<Vector2>() * mouseSensitivity;
             //Debug.Log(Mathf.Atan2(mousePosition.y,mousePosition.x) + ", " + ctx.ReadValue<Vector2>() +" ," + angle);
             turret.eulerAngles = new Vector3(0,mousePosition.x,0);
+            Debug.Log(mousePosition.x);
 
         };
 
@@ -69,6 +74,9 @@ Lock();
         currentHealth = maxHealth;
 
         //updateTower.Subscribe(UpdateTower);
+        currentHealth = maxHealth;
+        healthBar.maxValue = currentHealth;
+        healthBar.value=currentHealth;
     }
 
     private void ToggleLock()
@@ -106,14 +114,21 @@ Lock();
     }
 
 
-    void OnTakeDamage()
+    public void OnTakeDamage()
     {
         //Listen to enemy attack tower here
         //Decrement current health
+        currentHealth--;
+        healthBar.value = currentHealth;
 
         //Reload scene for now
         if (currentHealth <= 0)
+        {
+            FindObjectOfType<UIHandler>().ShowEndScreen();
+
             SceneManager.LoadScene("Game");
+        }
+            
     }
 
 }

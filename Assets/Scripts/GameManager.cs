@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
-using UnityEngine.UI;
 
 
 //Make this a singleton!!!
@@ -9,10 +9,7 @@ public class GameManager : MonoBehaviour
 {
     public int numEnemies;
     public int currentRound;
-
-
-    public Observer _observer;
-
+    UIHandler uiHandler;
 
     private static GameManager instance;//GameManager is a singleton with just 1 instance of it existing the whole game.
 
@@ -32,8 +29,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        _observer = GameObject.FindObjectOfType<Observer>();
-        _observer.OnVariableChange += UpdateEnemyCount;
+        uiHandler = gameObject.GetComponent<UIHandler>();
         if (instance == null)
         {
             instance = this;
@@ -45,8 +41,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void UpdateEnemyCount(int newVar)
+    private void Update()
     {
-        _observer.EnemyCount = numEnemies;
+        uiHandler.UpdateEnemyCount(numEnemies);
     }
+
 }
+
