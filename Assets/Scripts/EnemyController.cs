@@ -71,4 +71,12 @@ public class EnemyController : MonoBehaviour, IPooledObject
     {
         return this as T;
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            collision.gameObject.GetComponent<TurretController>().OnTakeDamage();
+        }
+    }
 }
