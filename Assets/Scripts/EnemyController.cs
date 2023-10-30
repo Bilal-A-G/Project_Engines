@@ -55,7 +55,8 @@ public class EnemyController : MonoBehaviour, IPooledObject
 
     public void SpawnObject()
     {
-        print("I was spawned.. What do I do?");
+        print("Enemy Spawned");
+
     }
 
     public void KillObject()

@@ -18,6 +18,7 @@ public class EnemySpawner : MonoBehaviour
         //WHY IS THIS NOT OBSERVER? THAT'S LITERALLY THE PURPOSE OF OBSERVER?
         if (GameManager.Instance.numEnemies == 0)
         {
+            Debug.Log("next Wave");
             GameManager.Instance.currentRound++;
             SpawnEnemies();
         }
@@ -35,6 +36,7 @@ public class EnemySpawner : MonoBehaviour
             n.z = n.y;
             n.y = 0;
             ec.transform.position = Target + n;
+
             GameManager.Instance.numEnemies++;// This is real lazy, but I'm not gunna do this part.
         }
     }
