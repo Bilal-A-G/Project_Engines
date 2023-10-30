@@ -51,8 +51,6 @@ public class EnemyController : MonoBehaviour, IPooledObject
         currentHealth -= damage;
         Debug.Log(currentHealth);
         if(currentHealth <= 0) KillObject();
-
-        //Decrement gameManager.numEnemies
     }
 
     public void SpawnObject()

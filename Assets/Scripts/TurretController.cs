@@ -21,16 +21,50 @@ public class TurretController : MonoBehaviour
     private float timeSinceLastFire;
     private float currentHealth;
 
+    [Header("W_I_Zr_Ds")]
+    [SerializeField] private EventObject updateTower;
+    [SerializeField] private EventObject activateTower;
+    [SerializeField] private EventObject deactivateTower;
+
+    [SerializeField] private StateLayerObject fsm;
+    [SerializeField] private CachedObjectWrapper cachedObjects;
+    [SerializeField] private GameObject callingObject;
+
+    private bool activated = true;
+
     private void Start()
     {
+        fsm.UpdateState(activateTower, callingObject, cachedObjects);
+
         timeSinceLastFire = cooldown;
         currentHealth = maxHealth;
+
+        updateTower.Subscribe(UpdateTower);
     }
 
     void Update()
     {
-        timeSinceLastFire += Time.deltaTime;
+        fsm.UpdateState(updateTower, callingObject, cachedObjects);
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            activated = !activated;
+
+            if (activated)
+            {
+                fsm.UpdateState(activateTower, callingObject, cachedObjects);
+            }
+            else
+            {
+                fsm.UpdateState(deactivateTower, callingObject, cachedObjects);
+            }
+        }
+
+        timeSinceLastFire += Time.deltaTime;
+    }
+
+    void UpdateTower()
+    {
         RotateTowardsTarget();
 
         if (timeSinceLastFire < cooldown)

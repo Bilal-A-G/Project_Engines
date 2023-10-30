@@ -12,7 +12,6 @@ namespace Managers.Pool
 
         private static Dictionary<string, Queue<IPooledObject>> _pool = new();
 
-        // Start is called before the first frame update
         void Start()
         {
             _pool = new();

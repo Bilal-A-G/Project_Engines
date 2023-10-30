@@ -30,7 +30,6 @@ public class EnemySpawner : MonoBehaviour
         //for each gameManager.currentRound spawn an enemy
         for (int i = 0; i < GameManager.Instance.currentRound; i++)
         {
-            Debug.Log("Hello");
             EnemyController ec = PoolManager.Spawn<EnemyController>("Enemy");
             Vector3 n = (Random.insideUnitCircle.normalized * spawnRadius);
             n.z = n.y;
@@ -38,15 +37,5 @@ public class EnemySpawner : MonoBehaviour
             ec.transform.position = Target + n;
             GameManager.Instance.numEnemies++;// This is real lazy, but I'm not gunna do this part.
         }
-
-        //Factory:
-        //Spawn a random enemy type
-        //Spawn it at a random spawner
-        //Assign the tower variable
-
-
-        //Increment num enemies
-        //GameManager.Instance.numEnemies++;
-        //Add object pooling here
     }
 }

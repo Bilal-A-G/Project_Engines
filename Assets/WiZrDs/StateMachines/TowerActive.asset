@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4aba365707e5f64baf7d3a15cb49dc0, type: 3}
+  m_Name: TowerActive
+  m_EditorClassIdentifier: 
+  onStateEnter: []
+  onStateExit: []
+  stateActions:
+  - translate: 0
+    isFolded: 1
+    translateTo: {fileID: 0}
+    action: {fileID: 11400000, guid: 7a4756d85e9a38845aa1913008b75729, type: 2}
+  stateTransitions:
+  - action: {fileID: 11400000, guid: 9c3a1b03bdc87f54cbdfda8f163db60f, type: 2}
+    stateObject: {fileID: 11400000, guid: ddd9f55426ef7d74abbf87bd773294f2, type: 2}
+  childLayer: {fileID: 0}
