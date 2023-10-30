@@ -40,8 +40,6 @@ public class TurretController : MonoBehaviour
         ctrls.Cringe.Enable();
         ctrls.Cringe.Shoot.performed += _ =>
         {
-            if (isUnlocked) Lock();
-
             if (timeSinceLastFire < cooldown) return;
             
             timeSinceLastFire = 0;
@@ -61,15 +59,22 @@ public class TurretController : MonoBehaviour
 
         };
 
-        ctrls.Cringe.Escape.performed += _ => Unlock();
+        ctrls.Cringe.Escape.performed += _ => ToggleLock();
 
-
+Lock();
+        
         fsm.UpdateState(activateTower, callingObject, cachedObjects);
 
         timeSinceLastFire = cooldown;
         currentHealth = maxHealth;
 
         //updateTower.Subscribe(UpdateTower);
+    }
+
+    private void ToggleLock()
+    {
+        if (isUnlocked) Lock();
+        else Unlock();
     }
 
     void Update()
