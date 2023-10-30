@@ -39,7 +39,7 @@ public class TurretController : MonoBehaviour
         timeSinceLastFire = cooldown;
         currentHealth = maxHealth;
 
-        updateTower.Subscribe(UpdateTower);
+        //updateTower.Subscribe(UpdateTower);
     }
 
     void Update()
@@ -61,6 +61,8 @@ public class TurretController : MonoBehaviour
         }
 
         timeSinceLastFire += Time.deltaTime;
+
+        UpdateTower();
     }
 
     void UpdateTower()
