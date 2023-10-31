@@ -9,6 +9,7 @@ public class ColorChanger : MonoBehaviour
         Green,
         Blue
     }
+    public Color colour;
 
     public PresetColor selectedColor;
 
@@ -18,19 +19,20 @@ public class ColorChanger : MonoBehaviour
         switch (selectedColor)
         {
             case PresetColor.None:
-                GetComponent<Renderer>().material.color = Color.white;
+                colour = Color.white;
                     break;
             case PresetColor.Red:
-                GetComponent<Renderer>().material.color = Color.red;
+                colour = Color.red;
                 break;
             case PresetColor.Green:
-                GetComponent<Renderer>().material.color = Color.green;
+                colour = Color.green;
                 break;
             case PresetColor.Blue:
-                GetComponent<Renderer>().material.color = Color.blue;
+                colour = Color.blue;
                 break;
             default:
                 break;
         }
+        GetComponent<Renderer>().material.color = colour;
     }
 }

@@ -14,16 +14,14 @@ public class EnemySpawner : MonoBehaviour
     {
         //if gameManager.numEnemies is 0
         Target = target.position; // Yes, this is faster than making target public.
-        
-        //WHY IS THIS NOT OBSERVER? THAT'S LITERALLY THE PURPOSE OF OBSERVER?
+
         if (GameManager.Instance.numEnemies == 0)
         {
             Debug.Log("next Wave");
             GameManager.Instance.currentRound++;
             SpawnEnemies();
         }
-        //Increment wave count
-        //Spawn enemies
+
     }
 
     void SpawnEnemies()
@@ -37,7 +35,7 @@ public class EnemySpawner : MonoBehaviour
             n.y = 0;
             ec.transform.position = Target + n;
 
-            GameManager.Instance.numEnemies++;// This is real lazy, but I'm not gunna do this part.
+            GameManager.Instance.numEnemies++;
         }
     }
 }
