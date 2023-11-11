@@ -1,25 +1,20 @@
+using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class TurretController : MonoBehaviour
 {
-    [SerializeField] private Rigidbody bulletPrefab;
-    [SerializeField] private Camera mainCamera;
-    [SerializeField] private float bulletVelocity;
+    //[SerializeField] private Camera mainCamera;
+    //[SerializeField] private float bulletVelocity;
     [SerializeField] private Transform turret;
-    [SerializeField] private Transform firePoint;
-    [SerializeField] private float rotationSpeed;
+    //[SerializeField] private float rotationSpeed;
 
     [SerializeField] private float maxHealth = 10;
+    [SerializeField] private WeaponBase weapon;
 
-    [SerializeField] private float bulletDamage;
-    [SerializeField] private float bulletLifetime;
-
-    [SerializeField] private float cooldown;
-    private float timeSinceLastFire;
-
-
+    private bool isShooting;
+    
     public float currentHealth;
     public Slider healthBar;
 
@@ -38,20 +33,19 @@ public class TurretController : MonoBehaviour
     private bool isUnlocked = true;
     private bool activated = true;
 
+    public static TurretController Player { get; private set; }
+
     private void Start()
     {
+        Player = this;
         ctrls = new();
         ctrls.Cringe.Enable();
+        
         ctrls.Cringe.Shoot.performed += _ =>
         {
-            if (timeSinceLastFire < cooldown) return;
-            
-            timeSinceLastFire = 0;
-            Rigidbody instantiatedBullet = Instantiate(bulletPrefab);
-            instantiatedBullet.transform.position = firePoint.position;
-            instantiatedBullet.AddForce(bulletVelocity * firePoint.forward, ForceMode.Impulse);
-            instantiatedBullet.GetComponent<Bullet>().bulletDamage = bulletDamage;
-            Destroy(instantiatedBullet, bulletLifetime);
+            isShooting = !isShooting;
+            if(isShooting) weapon.StartShooting();
+            else weapon.StopShooting();
         };
      
         Vector2 mousePosition = Vector2.zero;
@@ -60,8 +54,6 @@ public class TurretController : MonoBehaviour
             mousePosition += ctx.ReadValue<Vector2>() * mouseSensitivity;
             //Debug.Log(Mathf.Atan2(mousePosition.y,mousePosition.x) + ", " + ctx.ReadValue<Vector2>() +" ," + angle);
             turret.eulerAngles = new Vector3(0,mousePosition.x,0);
-            Debug.Log(mousePosition.x);
-
         };
 
         ctrls.Cringe.Escape.performed += _ => ToggleLock();
@@ -70,13 +62,17 @@ Lock();
         
         fsm.UpdateState(activateTower, callingObject, cachedObjects);
 
-        timeSinceLastFire = cooldown;
         currentHealth = maxHealth;
 
         //updateTower.Subscribe(UpdateTower);
         currentHealth = maxHealth;
         healthBar.maxValue = currentHealth;
         healthBar.value=currentHealth;
+    }
+
+    public void SetNewWeapon(WeaponStatsSO newWeapon)
+    {
+        weapon.SetNewStats(newWeapon);
     }
 
     private void ToggleLock()
@@ -96,7 +92,6 @@ Lock();
             fsm.UpdateState(activated ? activateTower : deactivateTower, callingObject, cachedObjects);
         }
 */
-        timeSinceLastFire += Time.deltaTime;
     }
 
     public void Lock()
@@ -114,11 +109,11 @@ Lock();
     }
 
 
-    public void OnTakeDamage()
+    public void OnTakeDamage(int amount)
     {
         //Listen to enemy attack tower here
         //Decrement current health
-        currentHealth--;
+        currentHealth -= amount;
         healthBar.value = currentHealth;
 
         //Reload scene for now

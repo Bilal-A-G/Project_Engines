@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1429527264143456148}
   - component: {fileID: 397960220021428263}
   - component: {fileID: 6137549482478122809}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -148,7 +148,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 068b73e74da61de478fcf3941055771b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tower: {fileID: 0}
   enemyStats: {fileID: 11400000, guid: deb6ca94618e4ee40abf0c2ef1c0027e, type: 2}
   enemy: {fileID: 2049432429023147747}
-  distanceToDamageTower: 0
+  distanceToDamageTower: 1

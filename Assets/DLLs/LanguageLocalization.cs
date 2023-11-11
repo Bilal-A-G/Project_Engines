@@ -54,7 +54,6 @@ public class LanguageLocalization : MonoBehaviour
         
         for (var index = 0; index < texts.Length-1; index++)
         {
-            print(defaults[index] + " --> " + selectedLanguage);
             texts[index].text = Marshal.PtrToStringAnsi(Translate(defaults[index], v));
         }
         

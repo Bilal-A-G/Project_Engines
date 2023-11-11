@@ -1,20 +1,22 @@
 using Managers.Pool;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour, IPooledObject
+public class EnemyController : MonoBehaviour, IPooledObject, IDamagable
 {
-    [HideInInspector] public EnemySO enemyStats;
+    [SerializeField] private EnemySO enemyStats;
 
     [SerializeField] private Transform enemy;
     [SerializeField] private float distanceToDamageTower;
 
     private float timeSinceLastHit;
-    private float currentHealth;
+    public float Health { get; set; }
+
 
     //Read in health from the SO and update current health
     private void Start()
     {
-        timeSinceLastHit = enemyStats.hitCooldown;    
+        timeSinceLastHit = enemyStats.hitCooldown;
+        Health = enemyStats._health;
     }
 
     private void Update()
@@ -38,6 +40,10 @@ public class EnemyController : MonoBehaviour, IPooledObject
         Debug.Log("Take that!!");
         //Add attack events here, that will be observed on the turret causing it's health to decrease
         //Add attack damage on the SO
+        
+        //Fuck it, nobody did this so I'm cheesing it -- Gabe
+        TurretController.Player.OnTakeDamage(enemyStats._damage);
+        
     }
 
     private void Move()
@@ -46,37 +52,40 @@ public class EnemyController : MonoBehaviour, IPooledObject
         enemy.transform.position += (EnemySpawner.Target - enemy.position).normalized * Time.deltaTime;
     }
 
-    public void TakeDamage(float damage)
+  
+    public void Die()
     {
-        currentHealth -= damage;
-        Debug.Log(currentHealth);
-        if(currentHealth <= 0) KillObject();
+        print("DIED");
+        KillObject();
+        
     }
-
+    public void KillObject()
+    {
+        print("KILLED");
+        gameObject.SetActive(false);
+        //PoolManager.ReturnToPool(this, name);
+        GameManager.onEnemyDestoryed.Invoke();// This is real lazy, but I'm not gunna do this part.
+    }
+    
     public void SpawnObject()
     {
         print("Enemy Spawned");
-
+        GameManager.onEnemySpawned.Invoke();
     }
 
-    public void KillObject()
-    {
-        gameObject.SetActive(false);
-        PoolManager.ReturnToPool(this, name);
-        --GameManager.Instance.numEnemies;// This is real lazy, but I'm not gunna do this part.
-
-    }
+    
 
     public T GetComponentType<T>() where T : MonoBehaviour
     {
         return this as T;
     }
 
+    /* Unless they die too, they'd hit you once, and only once... I've disabled this - Gabe.
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Player")
         {
             collision.gameObject.GetComponent<TurretController>().OnTakeDamage();
         }
-    }
+    } */
 }

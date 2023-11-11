@@ -11,7 +11,7 @@ public class EnemySO : ScriptableObject
     public float hitCooldown;
     [field: SerializeField] public int _health;
     [field: SerializeField] public float _speed;
-    [field: SerializeField] public float _damage;
+    [field: SerializeField] public int _damage;
 
     public enum _attackTypes
     {

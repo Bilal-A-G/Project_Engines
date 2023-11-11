@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b8a1166fae766b48b0b13217753caf0, type: 3}
+  m_Name: Shotgun
+  m_EditorClassIdentifier: 
+  timeBetweenAttacks: 0.6
+  timeBetweenBursts: 0
+  <ChargeUpTime>k__BackingField: 0
+  <MinChargePercent>k__BackingField: 0
+  <Spread>k__BackingField: 10
+  <IsFullyAuto>k__BackingField: 0
+  <Bullet>k__BackingField: {fileID: 11400000, guid: 973df8db305822d43a8e3e19c2ba3ae7, type: 2}
+  <ShotsFired>k__BackingField: 12
+  <BurstAmount>k__BackingField: 1

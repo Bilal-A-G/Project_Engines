@@ -32,11 +32,11 @@ namespace Managers.Pool
             }
         }
 
-        public static T Spawn<T>(string name, float lifeTime = 0) where T : MonoBehaviour
+        public static T Spawn<T>(string name, WaitForSeconds wait = null) where T : MonoBehaviour
         {
             if (!_pool.ContainsKey(name) || _pool[name].Count is 0)
             {
-                Debug.LogError($"WARNING: pool, {name} is EMPTY! Please allocate more resources or cull previous objects!");
+                Debug.LogError("No pool made or pool is empty");
                 return null;
             }
             IPooledObject obj = _pool[name].Dequeue();
@@ -44,7 +44,17 @@ namespace Managers.Pool
             obj.SpawnObject();
             T ret = obj.GetComponentType<T>();
             ret.gameObject.SetActive(true);
-            if(lifeTime > 0) ret.StartCoroutine(LifeTimer(obj, name, lifeTime));
+/*
+            if (_pool[name].Count is 0)
+            {
+                T x = obj.GetComponentType<T>();
+                _pool[name].Enqueue(obj);
+            }*/
+            
+            if(wait != null) ret.StartCoroutine(LifeTimer(obj, name, wait));
+            
+            
+            
             return ret;
         }
 
@@ -61,10 +71,11 @@ namespace Managers.Pool
             _pool[poolName].Enqueue(obj);
         }
 
-        private static IEnumerator LifeTimer(IPooledObject obj, string name, float time)
+        private static IEnumerator LifeTimer(IPooledObject obj, string name, WaitForSeconds wait)
         {
-            yield return new WaitForSeconds(time);
+            yield return wait;
             obj.KillObject();
+            _pool[name].Enqueue(obj);
         }
     }
 
