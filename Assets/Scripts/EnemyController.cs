@@ -64,6 +64,7 @@ public class EnemyController : MonoBehaviour, IPooledObject, IDamagable
         print("KILLED");
         gameObject.SetActive(false);
         //PoolManager.ReturnToPool(this, name);
+        ParticleManager.SpawnParticle("Confetti", transform.position, Quaternion.identity);
         GameManager.onEnemyDestoryed.Invoke();// This is real lazy, but I'm not gunna do this part.
     }
     

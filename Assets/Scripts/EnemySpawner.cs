@@ -12,10 +12,22 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private Transform target;
     public static Vector3 Target { get; private set; }
 
+    [SerializeField, Range(0,100)] private float spawnChance;
+
+    [SerializeField] private CollectableSO coinToSpawn; // Modify to spawn diamonds too
+    
+
     private void Start()
     {
         Target = target.position; // Yes, this is faster than making target public.
         GameManager.OnRoundEnd += SpawnEnemies;
+
+        GameManager.onEnemyDestoryed += () =>
+        {
+            if (spawnChance >= Random.Range(1, 100)) return;
+            Collectable c = PoolManager.Spawn<Collectable>("Collectable");
+            c.Create(coinToSpawn);
+        };
         SpawnEnemies();
     }
     

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15454f10dfb49104c93e9cb2f0a96b73, type: 3}
+  m_Name: Diamond
+  m_EditorClassIdentifier: 
+  <Value>k__BackingField: 100
+  <GetMesh>k__BackingField: {fileID: -4557486382965318575, guid: bfffbb285222c2d478f0b43e297439c5, type: 3}
+  <GetMaterial>k__BackingField: {fileID: 2100000, guid: f5ae97cd8c18c3147b24b51d9e7013fd, type: 2}
+  onCollected:
+    m_PersistentCalls:
+      m_Calls: []

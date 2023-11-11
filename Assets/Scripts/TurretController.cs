@@ -126,4 +126,8 @@ Lock();
             
     }
 
+    public void GiveCurrency(int statsValue)
+    {
+        //throw new System.NotImplementedException();
+    }
 }
