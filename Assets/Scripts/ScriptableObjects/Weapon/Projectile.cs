@@ -7,7 +7,6 @@ namespace Weapon
     public class Projectile : MonoBehaviour, IPooledObject
     {
 
-        //[SerializeField] private BulletSo stats;
     
         private Rigidbody rb;
         private float trueDamage;
@@ -19,7 +18,6 @@ namespace Weapon
             if (_targetLayer == -1)
             
                 _targetLayer = LayerMask.NameToLayer("Enemy");
-            
         }
 
         public void Init(float chargePercent, Vector3 fireDirection, BulletSo stats)
@@ -27,6 +25,15 @@ namespace Weapon
             transform.localScale = Vector3.one * stats.Scale;
             rb.AddForce(stats.Speed * chargePercent * fireDirection, ForceMode.Impulse);
             trueDamage = chargePercent * stats.Damage;
+
+            if (((int)stats.BulletType & (int)EProjectileType.Fire) == (int)EProjectileType.Fire)
+            {
+                print("FIRE!");
+            }
+            else
+            {
+                print("NOT FIRE!");
+            }
         }
     
 

@@ -21,6 +21,18 @@ public abstract class WeaponBase : MonoBehaviour
         _coolDownEnforce = new WaitUntil(() => !_isOnCooldown);
     }
 
+    private void Update()
+    {
+
+        print((1 << gameObject.layer) + (1 << LayerMask.NameToLayer("Bullet")));
+        
+        if (((int)weaponStats.WeaponType & (int)ECommonType.Uncommon) == (int)ECommonType.Uncommon)
+        {
+            Debug.Log("It works: " + weaponStats.WeaponType);
+        }
+    }
+
+
     public void StartShooting()
     {
         _currentFireTimer = StartCoroutine(ReFireTimer());

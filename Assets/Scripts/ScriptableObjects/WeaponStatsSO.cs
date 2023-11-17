@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace ScriptableObjects
@@ -15,9 +16,12 @@ namespace ScriptableObjects
         public WaitForSeconds BurstPeriod { get; private set; }
 
         [field: SerializeField] public BulletSo Bullet { get; private set; }
-    
+
         [field: SerializeField] public int ShotsFired { get; private set; }
         [field: SerializeField, Min(0)] public int BurstAmount { get; private set; }
+
+        [field: SerializeField] public ECommonType WeaponType { get; private set; }
+
 
         private void OnEnable()
         {
@@ -25,4 +29,16 @@ namespace ScriptableObjects
             BurstPeriod = new WaitForSeconds(timeBetweenBursts);
         }
     }
+
+    [Flags]
+    public enum ECommonType
+    {
+        Common = 1, // 000
+        Uncommon = 2, // 001
+        Rare = 4, // 010
+        Epic = 8, // 011
+        Lepicary = 24,
+        Legendary = 16 // 100
+    }
+
 }

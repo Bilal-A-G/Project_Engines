@@ -15,3 +15,4 @@ MonoBehaviour:
   <Damage>k__BackingField: 2
   <Speed>k__BackingField: 120
   <Scale>k__BackingField: 1
+  <BulletType>k__BackingField: 0

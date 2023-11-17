@@ -8,7 +8,7 @@ namespace Weapon
     public class ProjectileWeapon : WeaponBase
     {
         private bool isBursting;
-        private static readonly WaitForSeconds Seconds = new WaitForSeconds(3);
+        //private static readonly WaitForSeconds Seconds = new WaitForSeconds(3);
         protected override void Attack(float percent)
         {
             print("My weapon attacked: " + percent);
@@ -39,7 +39,7 @@ namespace Weapon
             for (int i = 0; i < weaponStats.ShotsFired; ++i)
             {
                 
-                Projectile proj = PoolManager.Spawn<Projectile>("Bullet", Seconds);
+                Projectile proj = PoolManager.Spawn<Projectile>("Bullet");
                 
                 //Projectile proj = Instantiate(myBullet);
                 //Destroy(proj.gameObject, 3);
@@ -50,6 +50,7 @@ namespace Weapon
                 projTransform.SetPositionAndRotation(firePoint.position, firePoint.rotation * randomAngle);
 
                 proj.Init(percent, projTransform.forward, weaponStats.Bullet);
+                
             }
         }
     }
