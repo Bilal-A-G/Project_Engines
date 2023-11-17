@@ -1,4 +1,6 @@
+using System;
 using ScriptableObjects;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -14,8 +16,18 @@ public class TurretController : MonoBehaviour
     [SerializeField] private WeaponBase weapon;
 
     private bool isShooting;
-    
-    public float currentHealth;
+
+    private float currentHealth;
+    public float CurrentHealth
+    {
+        get => currentHealth;
+        set
+        {
+            currentHealth = value;
+            healthBar.value = currentHealth / maxHealth;
+        }
+    }
+
     public Slider healthBar;
 
     [Header("W_I_Zr_Ds")]
@@ -33,11 +45,27 @@ public class TurretController : MonoBehaviour
     private bool isUnlocked = true;
     private bool activated = true;
 
+    private int currentScore;
+    [SerializeField] private TextMeshProUGUI score;
+    public int CurrentScore {
+        get => currentScore;
+        set
+        {
+            score.text = value.ToString("g");
+            currentScore = value;
+        }
+    }
+
     public static TurretController Player { get; private set; }
+
+    private void Awake()
+    {
+        Player = this; // I mean like... Really lazy.
+    }
 
     private void Start()
     {
-        Player = this;
+        
         ctrls = new();
         ctrls.Cringe.Enable();
         
@@ -113,8 +141,7 @@ Lock();
     {
         //Listen to enemy attack tower here
         //Decrement current health
-        currentHealth -= amount;
-        healthBar.value = currentHealth;
+        CurrentHealth -= amount;
 
         //Reload scene for now
         if (currentHealth <= 0)
@@ -128,6 +155,6 @@ Lock();
 
     public void GiveCurrency(int statsValue)
     {
-        //throw new System.NotImplementedException();
+        CurrentScore += statsValue;
     }
 }

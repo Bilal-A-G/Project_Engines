@@ -25,15 +25,6 @@ namespace Weapon
             transform.localScale = Vector3.one * stats.Scale;
             rb.AddForce(stats.Speed * chargePercent * fireDirection, ForceMode.Impulse);
             trueDamage = chargePercent * stats.Damage;
-
-            if (((int)stats.BulletType & (int)EProjectileType.Fire) == (int)EProjectileType.Fire)
-            {
-                print("FIRE!");
-            }
-            else
-            {
-                print("NOT FIRE!");
-            }
         }
     
 
