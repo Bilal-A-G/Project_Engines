@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
 
 namespace ECS_Scripts
@@ -30,6 +31,7 @@ namespace ECS_Scripts
     }
 
     [StructLayout(LayoutKind.Auto)]
+    [BurstCompile]
     public partial struct BulletJob : IJobEntity
     {
         public EntityCommandBuffer ECB;

@@ -1,9 +1,9 @@
 using Unity.Burst;
 using Unity.Entities;
-using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
+using Collider = Unity.Physics.Collider;
 
 namespace ECS_Scripts
 {
@@ -29,7 +29,7 @@ namespace ECS_Scripts
                 for (uint i = 0; i < turret.NumProjectiles; ++i)
                 {
                     Entity instance = state.EntityManager.Instantiate(turret.Projectile);
-                    Quaternion random = original * Quaternion.Euler(UnityEngine.Random.Range(-turret.Angle, turret.Angle), UnityEngine.Random.Range(-turret.Angle, turret.Angle), 0);
+                    Quaternion random = original * Quaternion.Euler(Random.Range(-turret.Angle, turret.Angle), Random.Range(-turret.Angle, turret.Angle), 0);
 /*
  * Quaternion randomAngle = Quaternion.Euler(Random.Range(-weaponStats.Spread, weaponStats.Spread),Random.Range(-weaponStats.Spread, weaponStats.Spread),0);
                 Transform projTransform = proj.transform;
@@ -50,7 +50,13 @@ namespace ECS_Scripts
                         Linear = random * up
                     });
                     
-                    state.EntityManager.SetComponentData(instance, new Bullet()
+                    state.EntityManager.SetComponentData(instance, new Collider
+                    {
+                        
+                    });
+
+                    
+                    state.EntityManager.SetComponentData(instance, new Bullet
                     {
                         lifeTime = UnityEngine.Random.Range(2f, 4)
                     });
