@@ -8,10 +8,10 @@ namespace Weapon
     public class ProjectileWeapon : WeaponBase
     {
         private bool isBursting;
-        //
-        private static readonly WaitForSeconds Seconds = new WaitForSeconds(3);
+        //private static readonly WaitForSeconds Seconds = new WaitForSeconds(3);
         protected override void Attack(float percent)
         {
+            print("My weapon attacked: " + percent);
             Fire(percent);
             if(weaponStats.BurstAmount != 0) StartCoroutine(FireLoop(percent));
         }
@@ -39,9 +39,10 @@ namespace Weapon
             for (int i = 0; i < weaponStats.ShotsFired; ++i)
             {
                 
-                //Projectile proj = PoolManager.Spawn<Projectile>("Bullet", Seconds);
-                Projectile proj = Instantiate(myBullet);
-                Destroy(proj.gameObject, 3);
+                Projectile proj = PoolManager.Spawn<Projectile>("Bullet");
+                
+                //Projectile proj = Instantiate(myBullet);
+                //Destroy(proj.gameObject, 3);
                 
 
                 Quaternion randomAngle = Quaternion.Euler(Random.Range(-weaponStats.Spread, weaponStats.Spread),Random.Range(-weaponStats.Spread, weaponStats.Spread),0);

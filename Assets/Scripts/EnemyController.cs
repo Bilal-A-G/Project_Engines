@@ -7,8 +7,6 @@ public class EnemyController : MonoBehaviour, IPooledObject, IDamagable
 
     [SerializeField] private Transform enemy;
     [SerializeField] private float distanceToDamageTower;
-    
-
 
     private float timeSinceLastHit;
     public float Health { get; set; }
@@ -68,10 +66,6 @@ public class EnemyController : MonoBehaviour, IPooledObject, IDamagable
         //PoolManager.ReturnToPool(this, name);
         ParticleManager.SpawnParticle("Confetti", transform.position, Quaternion.identity);
         GameManager.onEnemyDestoryed.Invoke();// This is real lazy, but I'm not gunna do this part.
-        float rng = Random.Range(0, 100f);
-        if (enemyStats.SpawnChance >= rng) return;
-        Collectable c = PoolManager.Spawn<Collectable>("Collectable");
-        c.Create(enemyStats.CoinToSpawn, transform.position);
     }
     
     public void SpawnObject()

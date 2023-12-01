@@ -10,7 +10,7 @@ public class Collectable : MonoBehaviour, IPooledObject
     private MeshFilter filter;
     private MeshRenderer renderer;
 
-    public void Create(CollectableSO s, Vector3 pos)
+    public void Create(CollectableSO s)
     {
         stats = s;
         if (!filter)
@@ -20,7 +20,6 @@ public class Collectable : MonoBehaviour, IPooledObject
             renderer = GetComponent<MeshRenderer>();
         }
 
-        transform.position = pos;
         filter.mesh = s.GetMesh;
         renderer.material = s.GetMaterial;
 
