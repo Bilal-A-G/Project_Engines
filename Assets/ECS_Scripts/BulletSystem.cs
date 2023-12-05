@@ -1,24 +1,25 @@
 using System.Runtime.InteropServices;
 using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
+using Unity.Physics.Systems;
 
 namespace ECS_Scripts
 {
-    [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+    [UpdateInGroup(typeof(PhysicsSimulationGroup))]
+    [BurstCompile]
     public partial struct BulletSystem : ISystem
     {    
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
+            state.RequireForUpdate<EndFixedStepSimulationEntityCommandBufferSystem.Singleton>();
         }
         [BurstCompile]
 
         public void OnUpdate(ref SystemState state)
         {
            
-            var ecbSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
+            var ecbSingleton = SystemAPI.GetSingleton<EndFixedStepSimulationEntityCommandBufferSystem.Singleton>();
             
             var bulletJob = new BulletJob()
             {

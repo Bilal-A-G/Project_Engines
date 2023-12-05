@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitCooldown: 1
   _health: 10
-  _speed: 0
+  _speed: 1
   _damage: 1
   <SpawnChance>k__BackingField: 10
   <CoinToSpawn>k__BackingField: {fileID: 11400000, guid: 255a1c13e186d2343b5e0c7c2e6e085b, type: 2}
-  m_AttackTypes: 2
+  m_AttackTypes: 1

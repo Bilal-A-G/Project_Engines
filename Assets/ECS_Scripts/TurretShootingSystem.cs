@@ -24,20 +24,14 @@ namespace ECS_Scripts
             //Debug.Log("Trying to shoot");
             Vector3 up = new Vector3(0, 0, 20);
             foreach (var (turret, localToWorld) in SystemAPI.Query<Turret, RefRO<LocalToWorld>>())
-            {
+            { 
+                if(turret.Health <= 0) continue;
                Quaternion original = localToWorld.ValueRO.Rotation;
                 for (uint i = 0; i < turret.NumProjectiles; ++i)
                 {
                     Entity instance = state.EntityManager.Instantiate(turret.Projectile);
                     Quaternion random = original * Quaternion.Euler(Random.Range(-turret.Angle, turret.Angle), Random.Range(-turret.Angle, turret.Angle), 0);
-/*
- * Quaternion randomAngle = Quaternion.Euler(Random.Range(-weaponStats.Spread, weaponStats.Spread),Random.Range(-weaponStats.Spread, weaponStats.Spread),0);
-                Transform projTransform = proj.transform;
-                projTransform.SetPositionAndRotation(firePoint.position, firePoint.rotation * randomAngle);
 
-                proj.Init(percent, projTransform.forward, weaponStats.Bullet);
-
- */
                     state.EntityManager.SetComponentData(instance, new LocalTransform
                     {
                         Position = SystemAPI.GetComponent<LocalToWorld>(turret.FirePoint).Position,
@@ -47,18 +41,19 @@ namespace ECS_Scripts
                 
                     state.EntityManager.SetComponentData(instance, new PhysicsVelocity
                     {
-                        Linear = random * up
+                        Linear = random * up * Random.Range(turret.ForceMin, turret.ForceMax)
                     });
                     
-                    state.EntityManager.SetComponentData(instance, new Collider
+                    /*state.EntityManager.SetComponentData(instance, new Collider
                     {
                         
-                    });
+                    });*/
 
                     
                     state.EntityManager.SetComponentData(instance, new Bullet
                     {
-                        lifeTime = UnityEngine.Random.Range(2f, 4)
+                        lifeTime = UnityEngine.Random.Range(2f, 4),
+                        Self = instance
                     });
                 }
 

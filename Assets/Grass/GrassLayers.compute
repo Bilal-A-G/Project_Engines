@@ -1,0 +1,130 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel Main
+
+#pragma multi_compile _ USE_WORLD_POSITION_AS_UV
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+struct SourceVertex
+{
+    float3 positionOS;
+    float3 normalOS;
+    float2 uv;
+};
+
+struct DrawVertex
+{
+    float3 positionWS;
+    float3 normalWS;
+    float2 uv;
+};
+
+struct DrawTriangle
+{
+    float2 heights;
+    DrawVertex vertices[3];
+};
+
+//Input
+StructuredBuffer<SourceVertex> _SourceVertices;
+StructuredBuffer<int> _SourceTriangles;
+
+//Output
+AppendStructuredBuffer<DrawTriangle> _DrawTriangles;
+
+
+float _TotalHeight;
+int _MaxLayers;
+float _WorldPositionToUVScale;
+
+float _CameraDistanceMin;
+float _CameraDistanceMax;
+float _CameraDistanceFactor;
+float4 _CameraPosition;
+
+float _UvScale;
+
+int _NumSourceTriangles;
+float4x4 _LocalToWorld;
+
+float GetDistanceFromCamera(DrawVertex v)
+{
+    return distance(v.positionWS.xyz, _CameraPosition.xyz);
+}
+
+int GetNumLayers(DrawVertex a, DrawVertex b, DrawVertex c)
+{
+    float dA = GetDistanceFromCamera(a);
+    float dB = GetDistanceFromCamera(b);
+    float dC = GetDistanceFromCamera(c);
+
+    float d = min(dA, min(dB, dC));
+
+    d = 1- smoothstep(_CameraDistanceMin, _CameraDistanceMax, d);
+
+    d = pow(abs(d), _CameraDistanceFactor);
+
+    return max(1, ceil(d * _MaxLayers));
+    
+}
+
+
+DrawVertex MakeBaseDrawVertex(SourceVertex v) {
+    DrawVertex o;
+    o.normalWS = mul(_LocalToWorld, float4(v.normalOS, 0)).xyz;
+    o.positionWS = mul(_LocalToWorld, float4(v.positionOS, 1)).xyz;
+    #ifdef USE_WORLD_POSITION_AS_UV
+    o.uv = o.positionWS.xz * _WorldPositionToUVScale * _UvScale; 
+    #else
+    o.uv = v.uv * _UvScale;
+    #endif
+    return o;
+}
+
+DrawVertex ExtrudeVertex(DrawVertex v, float height)
+{
+    DrawVertex o;
+
+    o.positionWS = v.positionWS + v.normalWS * (height * _TotalHeight);
+    o.normalWS = v.normalWS;
+    o.uv = v.uv;
+    return o;
+}
+
+
+[numthreads(128,1,1)]
+void Main (uint3 id : SV_DispatchThreadID)
+{
+ if((int)id >= _NumSourceTriangles)
+ {
+     return;
+ }
+    
+ const int triStart = id.x * 3;
+    DrawVertex inputs[3];
+
+    [unroll] for(int i = 0; i < 3; ++i)
+    {
+        inputs[i] = MakeBaseDrawVertex(_SourceVertices[_SourceTriangles[triStart+i]]);
+    }
+    const int numLayers = GetNumLayers(inputs[0], inputs[1], inputs[2]);
+    float colorOffset = (_MaxLayers - numLayers) / 2.0f;
+
+    
+    for(int t = 0; t < numLayers; ++t)
+    {
+        const float posHeight = (float)t / max(1, numLayers - 1.0f);
+        const float texHeight = (float)t / numLayers;
+
+        const float colorHeight = (float)(colorOffset + t) / (_MaxLayers - 1.0);
+        
+        DrawTriangle tri = (DrawTriangle)0;
+        tri.heights = float2(texHeight, colorHeight);
+        [unroll] for(int p = 0; p < 3; ++ p)
+        {
+            tri.vertices[p] = ExtrudeVertex(inputs[p],posHeight);
+        }
+
+        _DrawTriangles.Append(tri);
+    }
+}

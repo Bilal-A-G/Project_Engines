@@ -24,6 +24,7 @@ namespace ECS_Scripts
     public struct Bullet : IComponentData
     {
         public float lifeTime;
+        public Entity Self;
     }
 }
 

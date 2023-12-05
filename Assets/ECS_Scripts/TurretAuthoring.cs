@@ -11,6 +11,8 @@ namespace ECS_Scripts
         [SerializeField] private Transform firePoint;
         [SerializeField] private int numProjectiles;
         [SerializeField] private float angle = 45;
+        [SerializeField, Range(0,100)] private float minForce = 25;
+        [SerializeField, Range(0,100)] private float maxForce = 45;
         class TurretBaker : Baker<TurretAuthoring>
         {
             public override void Bake(TurretAuthoring authoring)
@@ -22,7 +24,10 @@ namespace ECS_Scripts
                     Projectile = GetEntity(authoring.projectile, TransformUsageFlags.Dynamic),
                     FirePoint =  GetEntity(authoring.firePoint, TransformUsageFlags.Dynamic),
                     NumProjectiles = authoring.numProjectiles,
-                    Angle = authoring.angle
+                    Angle = authoring.angle,
+                    ForceMin = authoring.minForce,
+                    ForceMax = authoring.maxForce,
+                    Health = 10
                 });
             
                 AddComponent<Shooting>(entity);
@@ -39,6 +44,9 @@ namespace ECS_Scripts
         public Entity FirePoint;
         public int NumProjectiles;
         public float Angle;
+        public float ForceMin;
+        public float ForceMax;
+        public int Health;
     }
 
     public struct Shooting : IComponentData, IEnableableComponent
