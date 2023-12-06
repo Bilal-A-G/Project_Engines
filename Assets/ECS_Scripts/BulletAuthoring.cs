@@ -16,7 +16,7 @@ namespace ECS_Scripts
                 {
                     lifeTime = 3
                 });
-                //AddComponent<URPMaterialPropertyBaseColor>(entity);
+                AddComponent<URPMaterialPropertyBaseColor>(entity);
             }
         }
     }

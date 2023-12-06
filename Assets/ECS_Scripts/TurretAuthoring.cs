@@ -33,6 +33,8 @@ namespace ECS_Scripts
                 AddComponent<Shooting>(entity);
                 AddComponent<PlayerMovementInput>(entity);
                 AddComponent<PlayerShootInput>(entity);
+                
+                
             }
         }
     

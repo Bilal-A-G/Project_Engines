@@ -1,9 +1,12 @@
 using Unity.Burst;
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Physics;
+using Unity.Rendering;
 using Unity.Transforms;
 using UnityEngine;
 using Collider = Unity.Physics.Collider;
+using Random = UnityEngine.Random;
 
 namespace ECS_Scripts
 {
@@ -43,11 +46,14 @@ namespace ECS_Scripts
                     {
                         Linear = random * up * Random.Range(turret.ForceMin, turret.ForceMax)
                     });
+
+
+                    float3 color = new float3(80,87,37) * Random.Range(0.7f, 1.3f) / 255;
                     
-                    /*state.EntityManager.SetComponentData(instance, new Collider
+                    state.EntityManager.SetComponentData(instance, new URPMaterialPropertyBaseColor()
                     {
-                        
-                    });*/
+                        Value = new float4(color.xyz, 1)
+                    });
 
                     
                     state.EntityManager.SetComponentData(instance, new Bullet

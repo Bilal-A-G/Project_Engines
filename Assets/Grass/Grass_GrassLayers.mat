@@ -40,7 +40,7 @@ Material:
     - _DetailDepthScale: 1
     - _SmoothDepthScale: 0.366
     - _WindAmplitude: 0.005
-    - _WindTimeMult: 0.37
+    - _WindTimeMult: 0.02
     m_Colors:
     - _BaseColor: {r: 0, g: 0.2924528, b: 0.07666241, a: 1}
     - _TopColor: {r: 0, g: 0.735849, b: 0, a: 1}
